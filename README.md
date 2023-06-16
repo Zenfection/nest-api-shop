@@ -32,6 +32,12 @@
 $ pnpm install
 ```
 
+## Database via docker
+
+```bash
+$ docker-compose up  
+```
+
 ## Running the app
 
 ```bash

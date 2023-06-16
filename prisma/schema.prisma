@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CustomerInfo {
+  id        String   @id @default(uuid())
+  fullname  String
+  phone     String
+  location  String
+  province  String
+  district  String
+  ward      String
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?
+
+  @@unique([fullname, phone, location])
+}
+
+model User {
+  id        String    @id @default(uuid())
+  role      UserRole  @default(USER)
+  email     String    @unique
+  username  String?   @unique
+  phone     String?   @unique
+  fullname  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  addresses Address[]
+  orders    Order[]
+
+  @@index([email, username, phone])
+}
+
+model Address {
+  id           String         @id @default(uuid())
+  isDefault    Boolean        @default(false)
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  customerInfo CustomerInfo[]
+  orders       Order[]
+
+  @@unique([userId, isDefault])
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  isActive Boolean   @default(true)
+  slug     String    @unique
+  title    String
+  images   String[]
+  products Product[]
+
+  @@unique([slug, title])
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  images      String[]
+  name        String
+  description String
+  price       Decimal  @db.Money
+  discount    Int
+  quantity    Int
+  sold        Int
+  ranking     Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([categoryId, name])
+}
+
+model Order {
+  id            String         @id @default(uuid())
+  locationId    String
+  location      Address        @relation(fields: [locationId], references: [id])
+  orderID       String
+  orderDate     DateTime
+  orderStatus   OrderStatus    @default(PENDING)
+  totalPrice    Decimal        @db.Money
+  userId        String?
+  user          User?          @relation(fields: [userId], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  orderProducts OrderProduct[]
+
+  @@unique([userId, orderID])
+}
+
+model OrderProduct {
+  id       String  @id @default(uuid())
+  quantity Int
+  discount Int
+  image    String
+  name     String
+  price    Decimal @db.Money
+  orderId  String
+  order    Order   @relation(fields: [orderId], references: [id])
+
+  @@unique([orderId, name])
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPING
+  DELIVERED
+  CANCELLED
+}
