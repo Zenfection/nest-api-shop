@@ -1,32 +1,84 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { PrismaService } from 'nestjs-prisma';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
 
-  findAll() {
-    return this.prisma.user.findMany();
-  }
-
-  findOne(id: string) {
-    const result = this.prisma.user.findUnique({ where: { id } });
-    if (!result) {
-      throw new NotFoundException('User not found');
+  private handlePrismaError(error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException('There is a unique constraint violation');
+      } else {
+        throw new BadRequestException(`Prisma Error: ${error.message}`);
+      }
+    } else {
+      throw new HttpException(error, 500);
     }
-    return result;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async create(data: Prisma.UserCreateInput): Promise<User> {
+    try {
+      const result = await this.prisma.user.create({
+        data,
+      });
+      return result;
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async findAll() {
+    try {
+      return await this.prisma.user.findMany();
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
+  }
+
+  async findOne(where: Prisma.UserWhereUniqueInput): Promise<User> {
+    try {
+      const result = await this.prisma.user.findUnique({
+        where,
+      });
+      if (!result) {
+        throw new NotFoundException(`${where.id} not found`);
+      }
+      return result;
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
+  }
+
+  async update(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.UserUpdateInput;
+  }): Promise<User> {
+    const { where, data } = params;
+    try {
+      return await this.prisma.user.update({
+        data,
+        where,
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
+  }
+
+  async remove(where: Prisma.UserWhereUniqueInput): Promise<User> {
+    try {
+      return await this.prisma.user.delete({
+        where,
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
   }
 }
