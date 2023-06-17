@@ -6,11 +6,10 @@ import { Prisma, User } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
-    const result = await this.prisma.user.create({
+  create(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({
       data,
     });
-    return result;
   }
 
   // async findAll(params: {
@@ -35,17 +34,10 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
-    return this.prisma.user
-      .findUnique({
-        where,
-      })
-      .then((result) => {
-        if (!result) {
-          throw new NotFoundException(`${where.id} not found`);
-        }
-        return result;
-      });
+  findOne(where: Prisma.UserWhereUniqueInput): Promise<User> {
+    return this.prisma.user.findUnique({
+      where,
+    });
   }
 
   async update(params: {
