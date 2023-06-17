@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { Prisma, User } from '@prisma/client';
 
@@ -6,8 +6,8 @@ import { Prisma, User } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
+  async create(data: Prisma.UserCreateInput): Promise<User> {
+    return await this.prisma.user.create({
       data,
     });
   }
@@ -30,12 +30,12 @@ export class UsersService {
   //   });
   // }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+    return await this.prisma.user.findMany();
   }
 
-  findOne(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prisma.user.findUnique({
+  async findOne(where: Prisma.UserWhereUniqueInput) {
+    return await this.prisma.user.findUnique({
       where,
     });
   }
@@ -51,7 +51,7 @@ export class UsersService {
     });
   }
 
-  async remove(where: Prisma.UserWhereUniqueInput): Promise<User> {
+  async remove(where: Prisma.UserWhereUniqueInput) {
     return await this.prisma.user.delete({
       where,
     });
