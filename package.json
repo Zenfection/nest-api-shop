@@ -1,8 +1,8 @@
 {
   "name": "nest-api-shop",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0.0",
+  "description": "API for a shop built with NestJS and Prisma",
+  "author": "Zenfection",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -40,6 +40,7 @@
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.21",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
