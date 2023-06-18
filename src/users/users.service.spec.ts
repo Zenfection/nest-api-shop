@@ -15,7 +15,7 @@ describe('UsersService', () => {
       imports: [PrismaModule],
     }).compile();
 
-    service = await module.get(UsersService);
+    service = module.get<UsersService>(UsersService);
     prisma = await module.get(PrismaService);
   });
 
@@ -47,27 +47,42 @@ describe('UsersService', () => {
     });
   });
 
-  // describe('create', () => {
-  //   it('should create a user', async () => {
-  //     const data = {
-  //       email: 'jestest@gmail.com',
-  //       fullname: 'jestest',
-  //     };
-  //     const user = await service.create(data);
-  //     await service.remove({ id: user.id });
-  //     // expect(user).objectContaining(UserEntity);
-  //   });
+  describe('create', () => {
+    // it('should create a user', async () => {
+    //   const data = {
+    //     email: 'jestest@gmail.com',
+    //     fullname: 'jestest',
+    //   };
+    //   const user = await service.create(data);
+    //   await service.remove({ id: user.id });
+    //   // expect(user).objectContaining(UserEntity);
+    // });
 
-  //   it('should throw PrismaClientValidationError when wrong data', async () => {
-  //     const data = {
-  //       email: '123',
-  //       fullname: '123',
-  //     };
-  //     try {
-  //       return await service.create(data);
-  //     } catch (err) {
-  //       expect(err).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
-  //     }
-  //   });
-  // });
+    it('should throw PrismaClientKnownRequestError when duplicate email', async () => {
+      const data = {
+        email: 'test123@gmail.com',
+        fullname: 'test123',
+      };
+      try {
+        return await service.create(data);
+      } catch (err) {
+        expect(err).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+      }
+    });
+
+    it('should throw PrismaClientKnownRequestError when wrong data', async () => {
+      const data = {
+        email: '123',
+        fullname: '123',
+      };
+      try {
+        return await service.create(data);
+      } catch (err) {
+        expect(err).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          expect(err.code).toEqual('P2002');
+        }
+      }
+    });
+  });
 });
