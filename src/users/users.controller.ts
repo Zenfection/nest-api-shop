@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -53,7 +55,15 @@ export class UsersController {
   @Patch(':id')
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req: any,
+  ) {
+    const userId = req.user.id;
+    if (userId !== id) {
+      throw new BadRequestException(`You can't update this ${id}`);
+    }
     return this.usersService.update({
       where: { id },
       data: updateUserDto,
@@ -63,7 +73,11 @@ export class UsersController {
   @Delete(':id')
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Request() req: any) {
+    const userId = req.user.id;
+    if (userId !== id) {
+      throw new BadRequestException(`You can't delete this ${id}`);
+    }
     return this.usersService.remove({ id });
   }
 }
