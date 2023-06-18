@@ -14,6 +14,7 @@ async function main() {
     create: {
       email: 'user123@gmail.com',
       fullname: 'Trần Văn A',
+      password: '123456',
     },
   });
 
@@ -23,6 +24,7 @@ async function main() {
     create: {
       email: 'user456@gmail.com',
       fullname: 'Nguyễn Văn B',
+      password: '123456',
     },
   });
 

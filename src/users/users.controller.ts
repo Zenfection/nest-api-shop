@@ -11,8 +11,14 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { Public } from '../../src/common/decorators/public.decorator';
 
 @Controller('users')
 @ApiTags('users')
@@ -26,6 +32,7 @@ export class UsersController {
   }
 
   @Get()
+  @Public()
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
     return this.usersService.findAll();
@@ -33,6 +40,7 @@ export class UsersController {
 
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
+  @ApiBearerAuth()
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne({ id });
     if (!user) {

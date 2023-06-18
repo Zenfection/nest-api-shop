@@ -30,6 +30,7 @@ model User {
   email     String    @unique
   username  String?   @unique
   phone     String?   @unique
+  password  String
   fullname  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

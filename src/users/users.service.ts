@@ -12,32 +12,20 @@ export class UsersService {
     });
   }
 
-  // async findAll(params: {
-  //   skip?: number;
-  //   take?: number;
-  //   // cursor?: Prisma.UserWhereUniqueInput;
-  //   // where?: Prisma.UserWhereInput;
-  //   // orderBy?: Prisma.UserOrderByWithRelationInput;
-  // }): Promise<User[]> {
-  //   // const { skip, take, cursor, where, orderBy } = params;
-  //   // const { skip, take } = params;
-  //   return this.prisma.user.findMany({
-  //     skip,
-  //     take,
-  //     // cursor,
-  //     // where,
-  //     // orderBy,
-  //   });
-  // }
-
   async findAll() {
-    return await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany();
+    users.filter((user) => {
+      delete user.password;
+    });
+    return users;
   }
 
   async findOne(where: Prisma.UserWhereUniqueInput) {
-    return await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where,
     });
+    const { password, ...result } = user;
+    return result;
   }
 
   async update(params: {
@@ -52,8 +40,10 @@ export class UsersService {
   }
 
   async remove(where: Prisma.UserWhereUniqueInput) {
-    return await this.prisma.user.delete({
+    const user = await this.prisma.user.delete({
       where,
     });
+    const { password, ...result } = user;
+    return result;
   }
 }
