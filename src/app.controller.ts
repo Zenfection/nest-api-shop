@@ -1,5 +1,7 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AccessGuard, Actions, UseAbility } from 'nest-casl';
+import { UserEntity } from './users/entities/user.entity';
 
 @Controller()
 export class AppController {

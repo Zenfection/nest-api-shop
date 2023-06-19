@@ -32,8 +32,8 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({
       where,
     });
-    const { password, ...result } = user;
-    return result;
+    // const { password, ...result } = user;
+    return user;
   }
 
   async update(params: {
