@@ -112,12 +112,14 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#remove" >remove</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
                                 <a href="#update" >update</a>
                             </li>
                         </ul>
@@ -168,8 +170,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="33"
-                            class="link-to-prism">src/users/users.controller.ts:33</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="45"
+                            class="link-to-prism">src/users/users.controller.ts:45</a></div>
                 </td>
             </tr>
 
@@ -248,8 +250,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="40"
-                            class="link-to-prism">src/users/users.controller.ts:40</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="52"
+                            class="link-to-prism">src/users/users.controller.ts:52</a></div>
                 </td>
             </tr>
 
@@ -297,8 +299,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="47"
-                            class="link-to-prism">src/users/users.controller.ts:47</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="62"
+                            class="link-to-prism">src/users/users.controller.ts:62</a></div>
                 </td>
             </tr>
 
@@ -355,6 +357,7 @@
                         <span class="modifier"></span>
                         <span class="modifier"></span>
                         <span class="modifier"></span>
+                        <span class="modifier"></span>
                         <span ><b>remove</b></span>
                         <a href="#remove"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -363,7 +366,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, req: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -371,14 +374,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Delete(&#x27;:id&#x27;)<br />@ApiOkResponse({type: UserEntity})<br />@ApiBearerAuth()<br /></code>
+                    <code>@Delete(&#x27;:id&#x27;)<br />@ApiOkResponse({type: UserEntity})<br />@ApiBearerAuth()<br />@Abilities({action: undefined, subject: UserEntity})<br /></code>
                 </td>
             </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="76"
-                            class="link-to-prism">src/users/users.controller.ts:76</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/users/users.controller.ts:97</a></div>
                 </td>
             </tr>
 
@@ -402,18 +405,6 @@
                                     <td>id</td>
                                     <td>
                                                 <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>req</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
                                     </td>
 
                                     <td>
@@ -447,6 +438,7 @@
                         <span class="modifier"></span>
                         <span class="modifier"></span>
                         <span class="modifier"></span>
+                        <span class="modifier">Async</span>
                         <span ><b>update</b></span>
                         <a href="#update"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -469,8 +461,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="58"
-                            class="link-to-prism">src/users/users.controller.ts:58</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/users/users.controller.ts:73</a></div>
                 </td>
             </tr>
 
@@ -532,7 +524,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>    <code>unknown</code>
 
                     </div>
                     <div class="io-description">
@@ -557,6 +549,8 @@
   Request,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
+  UseGuards,
 } from &#x27;@nestjs/common&#x27;;
 import { UsersService } from &#x27;./users.service&#x27;;
 import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;;
@@ -569,11 +563,21 @@ import {
 } from &#x27;@nestjs/swagger&#x27;;
 import { UserEntity } from &#x27;./entities/user.entity&#x27;;
 import { Public } from &#x27;../../src/common/decorators/public.decorator&#x27;;
+import {
+  Action,
+  CaslAbilityFactory,
+} from &#x27;../../src/casl/casl-ability.factory&#x27;;
+import { ForbiddenError } from &#x27;@casl/ability&#x27;;
+import { Abilities } from &#x27;../../src/casl/decorators/abilities.decorator&#x27;;
+import { AbilitiesGuard } from &#x27;../../src/casl/guards/abilities.guard&#x27;;
 
 @Controller(&#x27;users&#x27;)
 @ApiTags(&#x27;users&#x27;)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   @Post()
   @Public()
@@ -586,6 +590,9 @@ export class UsersController {
   @Public()
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
+    // const user &#x3D; req.user;
+    // console.log(user);
+    // const ability &#x3D; this.abilityFactory.defineAbility(user);
     return this.usersService.findAll();
   }
 
@@ -603,29 +610,31 @@ export class UsersController {
   @Patch(&#x27;:id&#x27;)
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  update(
+  async update(
     @Param(&#x27;id&#x27;) id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Request() req: any,
   ) {
-    const userId &#x3D; req.user.id;
-    if (userId !&#x3D;&#x3D; id) {
-      throw new BadRequestException(&#x60;You can&#x27;t update this ${id}&#x60;);
+    const ability &#x3D; this.caslAbilityFactory.createForUser(req.user);
+    const userUpdate &#x3D; await this.usersService.findOne({ id });
+    try {
+      ForbiddenError.from(ability).throwUnlessCan(Action.Update, userUpdate);
+      return this.usersService.update({
+        where: { id },
+        data: updateUserDto,
+      });
+    } catch (error) {
+      if (error instanceof ForbiddenError) {
+        throw new ForbiddenException(error.message);
+      }
     }
-    return this.usersService.update({
-      where: { id },
-      data: updateUserDto,
-    });
   }
 
   @Delete(&#x27;:id&#x27;)
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  remove(@Param(&#x27;id&#x27;) id: string, @Request() req: any) {
-    const userId &#x3D; req.user.id;
-    if (userId !&#x3D;&#x3D; id) {
-      throw new BadRequestException(&#x60;You can&#x27;t delete this ${id}&#x60;);
-    }
+  @Abilities({ action: Action.Delete, subject: UserEntity })
+  remove(@Param(&#x27;id&#x27;) id: string) {
     return this.usersService.remove({ id });
   }
 }

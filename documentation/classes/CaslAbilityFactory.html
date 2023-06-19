@@ -44,7 +44,7 @@
 
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Classes</li>
-  <li class="breadcrumb-item" >HttpExceptionFilter</li>
+  <li class="breadcrumb-item" >CaslAbilityFactory</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -68,18 +68,12 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/common/filters/http-exception.filter.ts</code>
+            <code>src/casl/casl-ability.factory.ts</code>
         </p>
 
 
 
 
-            <p class="comment">
-                <h3>Implements</h3>
-            </p>
-            <p class="comment">
-                        <code>ExceptionFilter</code>
-            </p>
 
 
             <section data-compodoc="block-index">
@@ -96,7 +90,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#catch" >catch</a>
+                                <a href="#createForUser" >createForUser</a>
                             </li>
                         </ul>
                     </td>
@@ -121,24 +115,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="catch"></a>
+                    <a name="createForUser"></a>
                     <span class="name">
-                        <span ><b>catch</b></span>
-                        <a href="#catch"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>createForUser</b></span>
+                        <a href="#createForUser"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>catch(exception: T, host: ArgumentsHost)</code>
+<code>createForUser(user: <a href="../classes/UserEntity.html" target="_self">UserEntity</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="14"
-                            class="link-to-prism">src/common/filters/http-exception.filter.ts:14</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="25"
+                            class="link-to-prism">src/casl/casl-ability.factory.ts:25</a></div>
                 </td>
             </tr>
 
@@ -159,21 +153,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>exception</td>
+                                    <td>user</td>
                                     <td>
-                                            <code>T</code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>host</td>
-                                    <td>
-                                            <code>ArgumentsHost</code>
+                                                <code><a href="../classes/UserEntity.html" target="_self" >UserEntity</a></code>
                                     </td>
 
                                     <td>
@@ -188,7 +170,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                     </div>
                     <div class="io-description">
@@ -209,38 +191,46 @@
 
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from &#x27;@nestjs/common&#x27;;
-import { Response } from &#x27;express&#x27;;
+  AbilityBuilder,
+  ExtractSubjectType,
+  InferSubjects,
+  AbilityClass,
+  MongoAbility,
+  createMongoAbility,
+} from &#x27;@casl/ability&#x27;;
+import { UserRole } from &#x27;@prisma/client&#x27;;
+import { UserEntity } from &#x27;../../src/users/entities/user.entity&#x27;;
 
-@Catch()
-export class HttpExceptionFilter&lt;T extends HttpException&gt;
-  implements ExceptionFilter
-{
-  catch(exception: T, host: ArgumentsHost) {
-    const ctx &#x3D; host.switchToHttp();
-    const response &#x3D; ctx.getResponse&lt;Response&gt;();
+export enum Action {
+  Manage &#x3D; &#x27;manage&#x27;,
+  Create &#x3D; &#x27;create&#x27;,
+  Read &#x3D; &#x27;read&#x27;,
+  Update &#x3D; &#x27;update&#x27;,
+  Delete &#x3D; &#x27;delete&#x27;,
+}
 
-    const status &#x3D;
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+export type Subjects &#x3D; InferSubjects&lt;typeof UserEntity&gt; | UserEntity | &#x27;all&#x27;;
 
-    const exceptionResponse &#x3D;
-      exception instanceof HttpException ? exception.getResponse() : exception;
+export type AppAbility &#x3D; MongoAbility&lt;[Action, Subjects]&gt;;
 
-    const error &#x3D;
-      typeof response &#x3D;&#x3D;&#x3D; &#x27;string&#x27;
-        ? { message: exceptionResponse }
-        : (exceptionResponse as object);
+export class CaslAbilityFactory {
+  createForUser(user: UserEntity) {
+    const { can, cannot, build } &#x3D; new AbilityBuilder(createMongoAbility);
 
-    response.status(status).json({
-      ...error,
-      timestamp: new Date().toISOString(),
+    if (user.role &#x3D;&#x3D;&#x3D; UserRole.ADMIN) {
+      can(Action.Manage, &#x27;all&#x27;);
+    } else {
+      can(Action.Read, &#x27;all&#x27;);
+      can(Action.Update, UserEntity);
+      cannot(Action.Delete, UserEntity).because(&#x27;You cannot delete users&#x27;);
+      // cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
+      //   &#x27;You can only update your own user&#x27;,
+      // );
+    }
+
+    return build({
+      detectSubjectType: (item) &#x3D;&gt;
+        item.constructor as ExtractSubjectType&lt;Subjects&gt;,
     });
   }
 }
@@ -282,7 +272,7 @@ export class HttpExceptionFilter&lt;T extends HttpException&gt;
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'HttpExceptionFilter.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'CaslAbilityFactory.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

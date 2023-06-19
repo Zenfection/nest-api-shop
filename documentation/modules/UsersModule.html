@@ -64,45 +64,61 @@
 <text text-anchor="start" x="429.73" y="-15.4" font-family="Times-12" font-size="14.00"> &#160;Exports</text>
 <g id="clust1" class="cluster">
 <title>cluster_UsersModule</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="170,-70 170,-268 326,-268 326,-70 170,-70"/>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="116,-70 116,-268 380,-268 380,-70 116,-70"/>
 </g>
-<g id="clust4" class="cluster">
-<title>cluster_UsersModule_exports</title>
-<polygon fill="none" stroke="black" points="193,-208 193,-260 303,-260 303,-208 193,-208"/>
+<g id="clust3" class="cluster">
+<title>cluster_UsersModule_imports</title>
+<polygon fill="none" stroke="black" points="272,-78 272,-130 372,-130 372,-78 272,-78"/>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_UsersModule_providers</title>
-<polygon fill="none" stroke="black" points="178,-78 178,-130 318,-130 318,-78 178,-78"/>
+<polygon fill="none" stroke="black" points="124,-78 124,-130 264,-130 264,-78 124,-78"/>
 </g>
-<!-- UsersService  -->
+<g id="clust4" class="cluster">
+<title>cluster_UsersModule_exports</title>
+<polygon fill="none" stroke="black" points="200,-208 200,-260 310,-260 310,-208 200,-208"/>
+</g>
+<!-- CaslModule -->
 <g id="node1" class="node">
-<title>UsersService </title>
-<polygon fill="#fb8072" stroke="black" points="294.85,-252 201.15,-252 201.15,-216 294.85,-216 294.85,-252"/>
-<text text-anchor="middle" x="248" y="-229.8" font-family="Times,serif" font-size="14.00">UsersService </text>
+<title>CaslModule</title>
+<polygon fill="#8dd3c7" stroke="black" points="364.44,-122 361.44,-126 340.44,-126 337.44,-122 279.56,-122 279.56,-86 364.44,-86 364.44,-122"/>
+<text text-anchor="middle" x="322" y="-99.8" font-family="Times,serif" font-size="14.00">CaslModule</text>
 </g>
 <!-- UsersModule -->
 <g id="node2" class="node">
 <title>UsersModule</title>
-<polygon fill="#8dd3c7" stroke="black" points="293.92,-187 290.92,-191 269.92,-191 266.92,-187 202.08,-187 202.08,-151 293.92,-151 293.92,-187"/>
-<text text-anchor="middle" x="248" y="-164.8" font-family="Times,serif" font-size="14.00">UsersModule</text>
+<polygon fill="#8dd3c7" stroke="black" points="300.92,-187 297.92,-191 276.92,-191 273.92,-187 209.08,-187 209.08,-151 300.92,-151 300.92,-187"/>
+<text text-anchor="middle" x="255" y="-164.8" font-family="Times,serif" font-size="14.00">UsersModule</text>
+</g>
+<!-- CaslModule&#45;&gt;UsersModule -->
+<g id="edge1" class="edge">
+<title>CaslModule&#45;&gt;UsersModule</title>
+<path fill="none" stroke="black" d="M290.25,-122.11C290.25,-122.11 290.25,-140.99 290.25,-140.99"/>
+<polygon fill="black" stroke="black" points="286.75,-140.99 290.25,-150.99 293.75,-140.99 286.75,-140.99"/>
+</g>
+<!-- UsersService  -->
+<g id="node3" class="node">
+<title>UsersService </title>
+<polygon fill="#fb8072" stroke="black" points="301.85,-252 208.15,-252 208.15,-216 301.85,-216 301.85,-252"/>
+<text text-anchor="middle" x="255" y="-229.8" font-family="Times,serif" font-size="14.00">UsersService </text>
 </g>
 <!-- UsersModule&#45;&gt;UsersService  -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>UsersModule&#45;&gt;UsersService </title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M248,-187.11C248,-187.11 248,-205.99 248,-205.99"/>
-<polygon fill="black" stroke="black" points="244.5,-205.99 248,-215.99 251.5,-205.99 244.5,-205.99"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M255,-187.11C255,-187.11 255,-205.99 255,-205.99"/>
+<polygon fill="black" stroke="black" points="251.5,-205.99 255,-215.99 258.5,-205.99 251.5,-205.99"/>
 </g>
 <!-- UsersService -->
-<g id="node3" class="node">
+<g id="node4" class="node">
 <title>UsersService</title>
-<ellipse fill="#fdb462" stroke="black" cx="248" cy="-104" rx="61.95" ry="18"/>
-<text text-anchor="middle" x="248" y="-99.8" font-family="Times,serif" font-size="14.00">UsersService</text>
+<ellipse fill="#fdb462" stroke="black" cx="194" cy="-104" rx="61.95" ry="18"/>
+<text text-anchor="middle" x="194" y="-99.8" font-family="Times,serif" font-size="14.00">UsersService</text>
 </g>
 <!-- UsersService&#45;&gt;UsersModule -->
-<g id="edge2" class="edge">
+<g id="edge3" class="edge">
 <title>UsersService&#45;&gt;UsersModule</title>
-<path fill="none" stroke="black" d="M248,-122.11C248,-122.11 248,-140.99 248,-140.99"/>
-<polygon fill="black" stroke="black" points="244.5,-140.99 248,-150.99 251.5,-140.99 244.5,-140.99"/>
+<path fill="none" stroke="black" d="M232.63,-118.1C232.63,-118.1 232.63,-140.72 232.63,-140.72"/>
+<polygon fill="black" stroke="black" points="229.13,-140.72 232.63,-150.72 236.13,-140.72 229.13,-140.72"/>
 </g>
 </g>
 </svg>
@@ -169,6 +185,16 @@
                     </ul>
                 </div>
                 <div class="col-sm-3">
+                    <h3>Imports<a href="https://angular.io/api/core/NgModule#imports" target="_blank" rel="noopener noreferrer"
+                            title="Official documentation about module imports"><span
+                                class="icon ion-ios-information-circle-outline"></a></h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a href="../modules/CaslModule.html">CaslModule</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
                     <h3>Exports<a href="https://angular.io/api/core/NgModule#exports" target="_blank" rel="noopener noreferrer"
                             title="Official documentation about module exports"><span
                                 class="icon ion-ios-information-circle-outline"></a></h3>
@@ -190,9 +216,10 @@
 import { UsersService } from &#x27;./users.service&#x27;;
 import { UsersController } from &#x27;./users.controller&#x27;;
 import { PrismaModule } from &#x27;nestjs-prisma&#x27;;
+import { CaslModule } from &#x27;../../src/casl/casl.module&#x27;;
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, CaslModule],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "doc": "npx compodoc -p tsconfig.doc.json -n \"My app documentation\""
+    "doc": "npx @compodoc/compodoc -p tsconfig.json -s"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",

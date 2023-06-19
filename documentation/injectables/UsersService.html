@@ -533,8 +533,8 @@ export class UsersService {
     const user &#x3D; await this.prisma.user.findUnique({
       where,
     });
-    const { password, ...result } &#x3D; user;
-    return result;
+    // const { password, ...result } &#x3D; user;
+    return user;
   }
 
   async update(params: {

@@ -28,7 +28,7 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content class">
+               <div class="content guard">
                    <div class="content-data">
 
 
@@ -40,11 +40,9 @@
 
 
 
-
-
 <ol class="breadcrumb">
-  <li class="breadcrumb-item">Classes</li>
-  <li class="breadcrumb-item" >HttpExceptionFilter</li>
+    <li class="breadcrumb-item">Guards</li>
+    <li class="breadcrumb-item" >RolesGuard</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -63,26 +61,20 @@
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="info">
-        <p class="comment">
+        <div class="tab-pane fade active in" id="info">
+            <p class="comment">
             <h3>File</h3>
-        </p>
-        <p class="comment">
-            <code>src/common/filters/http-exception.filter.ts</code>
-        </p>
-
-
-
-
-            <p class="comment">
-                <h3>Implements</h3>
             </p>
             <p class="comment">
-                        <code>ExceptionFilter</code>
+                <code>src/common/guards/roles.guard.ts</code>
             </p>
 
 
-            <section data-compodoc="block-index">
+
+
+
+
+                <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -96,7 +88,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#catch" >catch</a>
+                                <a href="#canActivate" >canActivate</a>
                             </li>
                         </ul>
                     </td>
@@ -110,9 +102,56 @@
     </table>
 </section>
 
+                <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(reflector: Reflector)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/common/guards/roles.guard.ts:8</a></div>
+                            </td>
+                        </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>reflector</td>
+                                                  
+                                                        <td>
+                                                                    <code>Reflector</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
 
-            <section data-compodoc="block-methods">
+                <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -121,24 +160,24 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="catch"></a>
+                    <a name="canActivate"></a>
                     <span class="name">
-                        <span ><b>catch</b></span>
-                        <a href="#catch"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>canActivate</b></span>
+                        <a href="#canActivate"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>catch(exception: T, host: ArgumentsHost)</code>
+<code>canActivate(context: ExecutionContext)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="14"
-                            class="link-to-prism">src/common/filters/http-exception.filter.ts:14</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="10"
+                            class="link-to-prism">src/common/guards/roles.guard.ts:10</a></div>
                 </td>
             </tr>
 
@@ -159,21 +198,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>exception</td>
+                                    <td>context</td>
                                     <td>
-                                            <code>T</code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>host</td>
-                                    <td>
-                                            <code>ArgumentsHost</code>
+                                            <code>ExecutionContext</code>
                                     </td>
 
                                     <td>
@@ -188,7 +215,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>    <code>boolean | Promise | Observable</code>
 
                     </div>
                     <div class="io-description">
@@ -199,54 +226,40 @@
         </tbody>
     </table>
 </section>
+        </div>
 
 
+        <div class="tab-pane fade  tab-source-code" id="source">
+            <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Reflector } from &#x27;@nestjs/core&#x27;;
+import { CanActivate, ExecutionContext, Injectable } from &#x27;@nestjs/common&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { UserRole } from &#x27;@prisma/client&#x27;;
+import { ROLES_KEY } from &#x27;../decorators/roles.decorator&#x27;;
 
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private readonly reflector: Reflector) {}
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise&lt;boolean&gt; | Observable&lt;boolean&gt; {
+    const requiredRoles &#x3D; this.reflector.getAllAndOverride&lt;UserRole[]&gt;(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
+    if (!requiredRoles) {
+      return true;
+    }
 
-    </div>
-
-
-    <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from &#x27;@nestjs/common&#x27;;
-import { Response } from &#x27;express&#x27;;
-
-@Catch()
-export class HttpExceptionFilter&lt;T extends HttpException&gt;
-  implements ExceptionFilter
-{
-  catch(exception: T, host: ArgumentsHost) {
-    const ctx &#x3D; host.switchToHttp();
-    const response &#x3D; ctx.getResponse&lt;Response&gt;();
-
-    const status &#x3D;
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-
-    const exceptionResponse &#x3D;
-      exception instanceof HttpException ? exception.getResponse() : exception;
-
-    const error &#x3D;
-      typeof response &#x3D;&#x3D;&#x3D; &#x27;string&#x27;
-        ? { message: exceptionResponse }
-        : (exceptionResponse as object);
-
-    response.status(status).json({
-      ...error,
-      timestamp: new Date().toISOString(),
-    });
+    const { user } &#x3D; context.switchToHttp().getRequest();
+    return requiredRoles.some((role) &#x3D;&gt; user.role?.includes(role));
   }
 }
 </code></pre>
-    </div>
+        </div>
 </div>
+
+
 
 
 
@@ -281,8 +294,8 @@ export class HttpExceptionFilter&lt;T extends HttpException&gt;
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'HttpExceptionFilter.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'guard';
+            var COMPODOC_CURRENT_PAGE_URL = 'RolesGuard.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

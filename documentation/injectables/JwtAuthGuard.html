@@ -64,7 +64,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/common/guards/jwt-auth.guard.ts</code>
+            <code>src/auth/guards/jwt-auth.guard.ts</code>
         </p>
 
 
@@ -110,7 +110,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/common/guards/jwt-auth.guard.ts:8</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/auth/guards/jwt-auth.guard.ts:8</a></div>
                             </td>
                         </tr>
 
@@ -174,7 +174,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="13"
-                            class="link-to-prism">src/common/guards/jwt-auth.guard.ts:13</a></div>
+                            class="link-to-prism">src/auth/guards/jwt-auth.guard.ts:13</a></div>
                 </td>
             </tr>
 
@@ -232,7 +232,7 @@
 import { Observable } from &#x27;rxjs&#x27;;
 import { AuthGuard } from &#x27;@nestjs/passport&#x27;;
 import { Reflector } from &#x27;@nestjs/core&#x27;;
-import { IS_PUBLIC_KEY } from &#x27;../decorators/public.decorator&#x27;;
+import { IS_PUBLIC_KEY } from &#x27;../../common/decorators/public.decorator&#x27;;
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(&#x27;jwt&#x27;) {
