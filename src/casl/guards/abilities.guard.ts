@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ABILITY_KEY, IAbilityMeta } from '../decorators/abilities.decorator';
 import { ForbiddenError } from '@casl/ability';
+import { IS_PUBLIC_KEY } from '../../../src/common/decorators/public.decorator';
 
 @Injectable()
 export class AbilitiesGuard implements CanActivate {
@@ -23,6 +24,14 @@ export class AbilitiesGuard implements CanActivate {
       this.reflector.get<IAbilityMeta[]>(ABILITY_KEY, context.getHandler()) ||
       [];
 
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
     const user = context.switchToHttp().getRequest().user;
     const ability = this.caslAbilityFactory.createForUser(user);
 
@@ -31,10 +40,6 @@ export class AbilitiesGuard implements CanActivate {
         ForbiddenError.from(ability).throwUnlessCan(rule.action, rule.subject);
       });
       return true;
-      // return rules.every((rule) => {
-      //   const { action, subject } = rule;
-      //   return ability.can(action, subject);
-      // });
     } catch (error) {
       if (error instanceof ForbiddenError) {
         throw new ForbiddenException(error.message);

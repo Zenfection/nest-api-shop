@@ -2,7 +2,7 @@ import {
   AbilityBuilder,
   ExtractSubjectType,
   InferSubjects,
-  AbilityClass,
+  defineAbility,
   MongoAbility,
   createMongoAbility,
 } from '@casl/ability';
@@ -23,22 +23,34 @@ export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 export class CaslAbilityFactory {
   createForUser(user: UserEntity) {
-    const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-
-    if (user.role === UserRole.ADMIN) {
-      can(Action.Manage, 'all');
-    } else {
-      can(Action.Read, 'all');
-      can(Action.Update, UserEntity);
-      cannot(Action.Delete, UserEntity).because('You cannot delete users');
-      // cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
-      //   'You can only update your own user',
-      // );
-    }
-
-    return build({
-      detectSubjectType: (item) =>
-        item.constructor as ExtractSubjectType<Subjects>,
+    return defineAbility((can, cannot) => {
+      if (user.role === UserRole.ADMIN) {
+        can(Action.Manage, 'all');
+      } else {
+        can(Action.Read, 'all');
+        can(Action.Update, UserEntity);
+        cannot(Action.Delete, UserEntity).because(
+          'only admins can delete users',
+        );
+        cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
+          'Only admins can update roles',
+        );
+      }
     });
+    // const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
+    // if (user.role === UserRole.ADMIN) {
+    //   can(Action.Manage, 'all');
+    // } else {
+    //   can(Action.Read, 'all');
+    //   can(Action.Update, UserEntity);
+    //   cannot(Action.Delete, UserEntity).because('You cannot delete users');
+    //   // cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
+    //   //   'You can only update your own user',
+    //   // );
+    // }
+    // return build({
+    //   detectSubjectType: (item) =>
+    //     item.constructor as ExtractSubjectType<Subjects>,
+    // });
   }
 }
