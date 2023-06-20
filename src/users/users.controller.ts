@@ -8,9 +8,8 @@ import {
   Delete,
   Request,
   NotFoundException,
-  BadRequestException,
   ForbiddenException,
-  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,20 +23,17 @@ import {
 import { UserEntity } from './entities/user.entity';
 import { Public } from '../../src/common/decorators/public.decorator';
 import {
-  Action,
-  CaslAbilityFactory,
-} from '../../src/casl/casl-ability.factory';
-import { ForbiddenError } from '@casl/ability';
-import { Abilities } from '../../src/casl/decorators/abilities.decorator';
-import { AbilitiesGuard } from '../../src/casl/guards/abilities.guard';
+  Abilities,
+  DeleteUserAbility,
+  ReadUserAbility,
+  UpdateUserAbility,
+} from '../../src/casl/decorators/abilities.decorator';
+import { PaginationQueryDto } from '../../src/common/dto/pagination-query.dto';
 
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly caslAbilityFactory: CaslAbilityFactory,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   @Public()
@@ -49,14 +45,12 @@ export class UsersController {
   @Get()
   @Public()
   @ApiOkResponse({ type: [UserEntity] })
-  findAll() {
-    // const user = req.user;
-    // console.log(user);
-    // const ability = this.abilityFactory.defineAbility(user);
-    return this.usersService.findAll();
+  findAll(@Query() pagination: PaginationQueryDto) {
+    return this.usersService.findAll(pagination);
   }
 
   @Get(':id')
+  @Abilities(new ReadUserAbility())
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
   async findOne(@Param('id') id: string) {
@@ -68,32 +62,27 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Abilities(new UpdateUserAbility())
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  async update(
+  update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Request() req: any,
   ) {
-    const ability = this.caslAbilityFactory.createForUser(req.user);
-    const userUpdate = await this.usersService.findOne({ id });
-    try {
-      ForbiddenError.from(ability).throwUnlessCan(Action.Update, userUpdate);
-      return this.usersService.update({
-        where: { id },
-        data: updateUserDto,
-      });
-    } catch (error) {
-      if (error instanceof ForbiddenError) {
-        throw new ForbiddenException(error.message);
-      }
+    if (req.user.role !== 'ADMIN' && req.user.id !== id) {
+      throw new ForbiddenException(`You only can update your own user`);
     }
+    return this.usersService.update({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
   @Delete(':id')
+  @Abilities(new DeleteUserAbility())
   @ApiOkResponse({ type: UserEntity })
   @ApiBearerAuth()
-  @Abilities({ action: Action.Delete, subject: UserEntity })
   remove(@Param('id') id: string) {
     return this.usersService.remove({ id });
   }

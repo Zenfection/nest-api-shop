@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User, UserRole } from '@prisma/client';
+import { IsOptional } from 'class-validator';
 
 export class UserEntity implements User {
   @ApiProperty()
@@ -12,13 +13,15 @@ export class UserEntity implements User {
   email: string;
 
   @ApiProperty()
-  username: string | null;
+  @IsOptional()
+  username: string;
 
   @ApiProperty()
   password: string;
 
   @ApiProperty()
-  phone: string | null;
+  @IsOptional()
+  phone: string;
 
   @ApiProperty()
   fullname: string;

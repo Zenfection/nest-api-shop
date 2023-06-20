@@ -3,6 +3,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationQueryDto } from '../../src/common/dto/pagination-query.dto';
 
 export const roundsOfHasing = 10;
 
@@ -20,8 +21,12 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany();
+  async findAll(params: PaginationQueryDto) {
+    const { skip, take } = params;
+    const users = await this.prisma.user.findMany({
+      skip,
+      take,
+    });
     users.filter((user) => {
       delete user.password;
     });
