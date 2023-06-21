@@ -10,7 +10,7 @@ import { UserRole } from '@prisma/client';
 import { UserEntity } from '../../src/users/entities/user.entity';
 
 export enum Action {
-  Manage = 'manage',
+  Manage = 'manage', // CRUD
   Create = 'create',
   Read = 'read',
   Update = 'update',
@@ -33,7 +33,7 @@ export class CaslAbilityFactory {
           'only admins can delete users',
         );
         cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
-          'Only admins can update roles',
+          'You can only update your own user',
         );
       }
     });
