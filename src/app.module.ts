@@ -9,12 +9,14 @@ import { CaslModule } from './casl/casl.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AbilitiesGuard } from './casl/guards/abilities.guard';
 import appConfig from './config/app.config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [appConfig],
     }),
+    EventEmitterModule.forRoot(),
     CaslModule,
     UsersModule,
     CommonModule,
