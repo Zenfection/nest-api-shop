@@ -28,13 +28,13 @@ export class CaslAbilityFactory {
         can(Action.Manage, 'all');
       } else {
         can(Action.Read, 'all');
-        can(Action.Update, UserEntity);
+        can(Action.Update, UserEntity, { id: user.id });
         cannot(Action.Delete, UserEntity).because(
           'only admins can delete users',
         );
-        cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
-          'You can only update your own user',
-        );
+        // cannot(Action.Update, UserEntity, { id: { $ne: user.id } }).because(
+        //   'You can only update your own user',
+        // );
       }
     });
     // const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
