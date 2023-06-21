@@ -8,10 +8,13 @@ import { AuthModule } from './auth/auth.module';
 import { CaslModule } from './casl/casl.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AbilitiesGuard } from './casl/guards/abilities.guard';
+import appConfig from './config/app.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [appConfig],
+    }),
     CaslModule,
     UsersModule,
     CommonModule,
